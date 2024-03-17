@@ -111,6 +111,31 @@ public static class SetsAndMapsTester {
         // To display the pair correctly use something like:
         // Console.WriteLine($"{word} & {pair}");
         // Each pair of words should displayed on its own line.
+        HashSet<string> wordSet = new HashSet<string>(words);
+        List<string> pairs = new List<string>();
+        foreach (var word in wordSet)
+        {
+            string mirrorWord = new string(word.Reverse().ToArray());
+
+            if (wordSet.Contains(mirrorWord) && word != mirrorWord)
+            {
+                // Create the pair with the words in ascending order
+                var pair = new List<string> {word, mirrorWord};
+                pair.Sort();
+
+                // Convert the list into a single string and check if it's not a duplicate
+                var pairString = string.Join(", ", pair);
+                if (!pairs.Contains(pairString))
+                {
+                    pairs.Add(pairString);
+                }
+            }
+        }
+        foreach (var pair in pairs)
+        {
+            Console.WriteLine(pair);
+        }
+        
     }
 
     /// <summary>
@@ -158,7 +183,44 @@ public static class SetsAndMapsTester {
     /// #############
     private static bool IsAnagram(string word1, string word2) {
         // Todo Problem 3 - ADD YOUR CODE HERE
-        return false;
+        word1 = word1.ToLower();
+        word2 = word2.ToLower();
+        if (word1.Length != word2.Length)
+        {
+            return false;
+        }
+
+        Dictionary<char, int> counts = new Dictionary<char, int>();
+        foreach (var letter in word1)
+        {
+            if (counts.ContainsKey(letter))
+            {
+                counts[letter]++;
+            }
+            else
+            {
+                counts[letter] = 1;
+            }
+        }
+        foreach (var letter in word2)
+        {
+            if (counts.ContainsKey(letter))
+            {
+                counts[letter]--;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        foreach (var count in counts.Values)
+        {
+            if (count != 0)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     /// <summary>
